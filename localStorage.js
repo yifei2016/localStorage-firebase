@@ -16,21 +16,9 @@ function submitMessage(){
   let fb = firebase.database();
   // fb.ref().child('message/')
   //   .once('value')
-  //   .then(function() {
-  //
-  //   })
-  //   .then(function(){
-  //
-  //   })
-  //   .then(function(){
-  //
-  //   })
-  //   .catch(function(){
-  //
-  //   })
-  //   .finally(function(){
-  //
-  //   })
+  //   .then(function(){})
+  //   .catch(function(){})
+  //   .finally(function(){})
   fb.ref().child('message/').once('value')
     .then(function(snapshot){
       let allMessages = snapshot.val();
@@ -53,21 +41,19 @@ function submitMessage(){
       return listMessages();
     })
     .catch(function(err){
-
     })
   // fb.ref().child('message/').once('value', function(snapshot) {
   //  firebase.database().ref('message/').on('value', function(snapshot) { }// });
 }
 
-function updateLike(messageId, likePoints){
-  firebase.database().ref('message/' + messageId + 'like/').set(likePoints)
+function updateLike(message){
+
+  firebase.database().ref('message/' + message.id).set(message)
 }
 
 //delete a record
+//firebase.database().ref().child("message").remove()
 //fb.ref().child("message").remove()
-
-// fb.ref('message/').on('value', function(snapshot) {
-//   let allMessages = snapshot.val();}
 
 //update an existing record
 // let messageId = "-Kfc5UVtW1hFT1Y36JTC"
@@ -105,44 +91,45 @@ function listMessages(){
         allMessages={}
       }
       Object.keys(allMessages).reverse().forEach(function(key){
+
         let mes = allMessages[key];
-        debugger
+        let upVoteId = "upVote-"+mes.id;
+        let downVoteId = "downVote-" + mes.id;
+        let pointId = "point-" + mes.id;
         let tr = document.createElement('tr');
         tr.innerHTML = `<td>${mes.name}</td>
         <td>${mes.text}
-        <button style="border:none; background-color:Transparent;">
-        <i class="fa fa-thumbs-up fa-2x" aria-hidden="true" style="color:pink;" id="upVote"></i>
-        <p id="point"></p></button>
+        <button style="border:none; background-color:Transparent;" id=${upVoteId}>
+        <i class="fa fa-thumbs-up fa-2x" aria-hidden="true" style="color:pink;"></i>
+        <span><p id=${pointId}>${mes.like}</p></span></button>
         <button  style="border:none; background-color:Transparent;">
-        <i class="fa fa-thumbs-down fa-2x" aria-hidden="true" style="color:black;" id="downVote"></i>
+        <i class="fa fa-thumbs-down fa-2x" aria-hidden="true" style="color:black;" id=${downVoteId}></i>
         </button>
         </td>
         <td>${mes.time}</td>
         <td>${mes.id}</td>`;
         table.appendChild(tr);
-        let upVote = document.getElementById("upVote");
-        let downVote = document.getElementById("downVote");
-        let point = document.getElementById("point");
+        let upVote = document.getElementById(`${upVoteId}`);
+        let downVote = document.getElementById(`${downVoteId}`);
+        let point = document.getElementById(`${pointId}`);
         upVote.addEventListener("click",function(event){
           mes.like += 1;
           point.innerHTML = mes.like;
-          updateLike(mes.id,mes.like);
+          updateLike(mes);
         })
-        let fa = function(event){
+
+        downVote.addEventListener("click",function(event){
           mes.like -= 1;
           point.innerHTML = mes.like;
-          updateLike(mes.id,mes.like);
-        }
-        downVote.addEventListener("click",fa)
+          updateLike(mes);
+        })
+
         setTimeout(function(){
           animateInterval(100)
         }, 2000);
       });
   })
-  .catch(function(err){
-    debugger
-  })
-   // firebase.database().ref('message/').on('value', function(snapshot) {});
+  .catch(function(err){})
 }
 
 function forgetButton(){
@@ -151,10 +138,6 @@ function forgetButton(){
   paragraf.innerHTML="please enter your name";
 }
 
-window.onload = function(){
-
-
-}
 
 // submit.addEventListener('click', function() {
 //   // a = {}          // localStorage = {}
