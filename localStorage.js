@@ -91,7 +91,6 @@ function listMessages(){
         allMessages={}
       }
       Object.keys(allMessages).reverse().forEach(function(key){
-
         let mes = allMessages[key];
         let upVoteId = "upVote-"+mes.id;
         let downVoteId = "downVote-" + mes.id;
@@ -99,15 +98,19 @@ function listMessages(){
         let tr = document.createElement('tr');
         tr.innerHTML = `<td>${mes.name}</td>
         <td>${mes.text}
-        <button style="border:none; background-color:Transparent;" id=${upVoteId}>
-        <i class="fa fa-thumbs-up fa-2x" aria-hidden="true" style="color:pink;"></i>
-        <span><p id=${pointId}>${mes.like}</p></span></button>
-        <button  style="border:none; background-color:Transparent;">
-        <i class="fa fa-thumbs-down fa-2x" aria-hidden="true" style="color:black;" id=${downVoteId}></i>
-        </button>
         </td>
         <td>${mes.time}</td>
         <td>${mes.id}</td>`;
+        table.appendChild(tr);
+        tr = document.createElement('tr');
+        tr.innerHTML = `<td style="color:#87CEEB;">Likes  <span id=${pointId}>${mes.like}</span></td>`;
+         table.appendChild(tr);
+        tr = document.createElement('tr');
+        tr.innerHTML = `<td><button style="border:none; background-color:Transparent;" id=${upVoteId}>
+        <i class="fa fa-thumbs-up" aria-hidden="true" style="color:#87CEEB;"></i>
+        </button><button  style="border:none; background-color:Transparent;">
+        <i class="fa fa-thumbs-down" aria-hidden="true" style="color:black;" id=${downVoteId}></i>
+        </button></td>`;
         table.appendChild(tr);
         let upVote = document.getElementById(`${upVoteId}`);
         let downVote = document.getElementById(`${downVoteId}`);
