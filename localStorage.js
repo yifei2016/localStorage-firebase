@@ -48,7 +48,7 @@ function submitMessage(){
 
 function updateLike(message){
 
-  firebase.database().ref('message/' + message.id).set(message)
+firebase.database().ref('message/' + message.id).set(message)
 }
 
 //delete a record
